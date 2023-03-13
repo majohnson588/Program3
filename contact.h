@@ -12,6 +12,7 @@
 #define TELENUM_MAX 12
 #define ADDRESS_MAX 30
 
+#define DEFAULT_SZ 3
 typedef struct PeoInfo
 {
 	char Name[NAME_MAX];
@@ -23,8 +24,9 @@ typedef struct PeoInfo
 
 typedef struct Contact
 {
-	PeoInfo data[MAX];
+	PeoInfo* data;
 	int sz;
+	int capacity;
 }Contact;
 
 void InitContact(Contact* pc);
@@ -48,3 +50,7 @@ void Menu();
 int cmp_peo_by_name1(const void* p1, const void* p2);
 
 int cmp_peo_by_name2(const void* p1, const void* p2);
+
+void DestoryContact(Contact* pc);
+
+void CheckContact(Contact* pc);
