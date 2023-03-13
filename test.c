@@ -39,21 +39,26 @@ void InitContact(Contact* pc)
 	assert(pc);
 
 	pc->sz = 0;
+	pc->capacity = DEFAULT_SZ;
+	pc->data = (PeoInfo*)malloc(pc->capacity * sizeof(PeoInfo));
+	if (pc->data == NULL)
+	{
+		perror("InitContact::malloc");
+		return;
+	}
 	memset(pc->data, 0, sizeof(pc->data));
 }
 
 void AddContact(Contact* pc)
 {
-	if (pc->sz == MAX)
-	{
-		printf("通讯录已满，无法添加新信息\n");
-	}
+	CheckContact(&con);
 	printf("请输入名字：>");
 	scanf("%s", pc->data[pc->sz].Name);
 	printf("请输入年龄：>");
 	scanf("%d", &pc->data[pc->sz].Age);
 	printf("请输入性别：>");
 	scanf("%s", pc->data[pc->sz].Sex);
+	getchar();
 	printf("请输入电话号码：>");
 	scanf("%s", pc->data[pc->sz].TeleNum);
 	printf("请输入地址：>");
@@ -225,4 +230,26 @@ void SortContact(Contact* pc)
 		}
 	} while (input < 0 || input>2);
 	printf("排序成功\n");
+}
+
+void DestoryContact(Contact* pc)
+{
+	free(pc->data);
+	pc->data = NULL;
+	pc->capacity = 0;
+	pc->sz = 0;
+	printf("销毁成功\n");
+}
+
+void CheckContact(Contact* pc)
+{
+	if (pc->sz == pc->capacity)
+	{
+		PeoInfo* tmp = (PeoInfo*)realloc(pc->data, (pc->capacity + 2) * sizeof(PeoInfo));
+		if (tmp != NULL)
+		{
+			pc->data = tmp;
+		}
+		pc->capacity += 2;
+	}
 }
